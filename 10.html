@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div>
+		<b>PART 1:</b><br>
+		<b>Result: <span id="result1"></span></b><br>
+		Test: <span id="test1"></span>
+	</div><br>
+	<div>
+		<b>PART 2:</b><br>
+		<b>Result: <span id="result2"></span></b><br>
+		Test: <span id="test2"></span>
+	</div>
+	<script>
+	var input = "1113122113";
+	var inputLoops = [40, 50];
+	/*part1*/
+	function lookAndSay(str, loops) {
+		var arr = str.split("");
+		var newStr = "";
+		for (var i = 0; i<loops;i++) {
+			newStr = "";
+			for (var j = 0; j<arr.length;j++) {
+				var end = false;
+				var k = 1;
+				while (!end) {
+					if (arr[j] != arr[j+k] || typeof arr[j+k] == "undefined") {
+						end = true;
+						break;
+					}
+					k++;
+				}
+				newStr += k.toString() + arr[j];
+				j += k-1;
+			}
+			arr = newStr.split("");
+		}
+		return newStr;
+	}
+	document.getElementById("result1").innerHTML = lookAndSay(input, inputLoops[0]).length;
+	document.getElementById("test1").innerHTML = (lookAndSay("1", 5)==="312211" && lookAndSay("1", 5).length===6) ? "OK" : "ERROR";
+	/*part2*/
+	document.getElementById("result2").innerHTML = lookAndSay(input, inputLoops[1]).length;
+	document.getElementById("test2").innerHTML = (lookAndSay("1", 5)==="312211" && lookAndSay("1", 5).length===6) ? "OK" : "ERROR";
+	</script>
+</body>
+</html>

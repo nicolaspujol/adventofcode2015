@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div>
+		<b>PART 1:</b><br>
+		<b>Result: <span id="result1"></span></b><br>
+		Test: <span id="test1"></span>
+	</div><br>
+	<div>
+		<b>PART 2:</b><br>
+		<b>Result: <span id="result2"></span></b><br>
+		Test: <span id="test2"></span>
+	</div>
+	<script>
+	var input = ["Faerun to Tristram = 65", "Faerun to Tambi = 129", "Faerun to Norrath = 144", "Faerun to Snowdin = 71", "Faerun to Straylight = 137", "Faerun to AlphaCentauri = 3", "Faerun to Arbre = 149", "Tristram to Tambi = 63", "Tristram to Norrath = 4", "Tristram to Snowdin = 105", "Tristram to Straylight = 125", "Tristram to AlphaCentauri = 55", "Tristram to Arbre = 14", "Tambi to Norrath = 68", "Tambi to Snowdin = 52", "Tambi to Straylight = 65", "Tambi to AlphaCentauri = 22", "Tambi to Arbre = 143", "Norrath to Snowdin = 8", "Norrath to Straylight = 23", "Norrath to AlphaCentauri = 136", "Norrath to Arbre = 115", "Snowdin to Straylight = 101", "Snowdin to AlphaCentauri = 84", "Snowdin to Arbre = 96", "Straylight to AlphaCentauri = 107", "Straylight to Arbre = 14", "AlphaCentauri to Arbre = 46"];
+	/*part1*/
+
+	function shortestRoute(arr) {
+		/*var cities = [];
+		for (var i = 0; i<arr.length; i++) {
+			var parts = /([a-zA-Z]*) to ([a-zA-Z]*) = ([0-9]*)/g.exec(arr[i]);
+			console.log(parts[1], parts[2], parts[3]);
+		}*/
+		
+		var routes = arr.reduce((mem, line) => {
+			var [path, dist] = line.split(" = ");
+			var [frm, to] = path.split(" to ");
+			mem[frm] = mem[frm] || {};
+			mem[to] = mem[to] || {};
+			mem[frm][to] = parseInt(dist);
+			mem[to][frm] = parseInt(dist);
+			return mem;
+		}, {});
+
+		var locs = Object.keys(routes);
+		var max = false;
+		var min = false;
+
+		for (var i = 0; i < 1000000; i++) {
+			locs = shuffle(locs);
+			var len = 0;
+			for (var l = 0; l < (locs.length - 1); l++) {
+				var frm = locs[l];
+				var to = locs[l+1];
+
+				len += routes[frm][to];
+			}
+			min = Math.min(min, len) || len
+			max = Math.max(max, len) || len
+		}
+		return [min, max];
+	}
+	function shuffle(array) {
+		var out = [];
+		while (array.length) {
+			var index = Math.floor(Math.random() * array.length);
+			out.push(array.splice(index, 1)[0]);
+		}
+		return out;
+	}
+	document.getElementById("result1").innerHTML = shortestRoute(input)[0];
+	document.getElementById("test1").innerHTML = (shortestRoute(["London to Dublin = 464", "London to Belfast = 518", "Dublin to Belfast = 141"])[0]===605) ? "OK" : "ERROR";
+	/*part2*/
+	document.getElementById("result2").innerHTML = shortestRoute(input)[1];
+	document.getElementById("test2").innerHTML = (shortestRoute(["London to Dublin = 464", "London to Belfast = 518", "Dublin to Belfast = 141"])[1]===982) ? "OK" : "ERROR";
+	</script>
+</body>
+</html>
