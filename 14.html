@@ -29,32 +29,36 @@
 			var matches = newArr[i].match(/(.*) can fly ([0-9]*) km\/s for ([0-9]*) seconds, but then must rest for ([0-9]*)/);
 			obj[matches[1]] = {
 				"fly": parseInt(matches[2]),
-				"for": parseInt(matches[3]),
+				"flyFor": parseInt(matches[3]),
 				"rest": parseInt(matches[4]),
 				"pos": 0,
-				"flying": parseInt(matches[2]),
+				"flying": parseInt(matches[3]),
 				"resting": 0
 			}
 		}
+		console.log(obj)
 		for (var i = 0; i < seconds; i++) {
 			for (var reindeer in obj) {
 				if (obj[reindeer].flying > 0) {
 					obj[reindeer].flying--;
-					obj[reindeer].pos += obj[reindeer].for;
-				} else if (obj[reindeer].flying == 0 && obj[reindeer].resting == 0) {
-					obj[reindeer].resting = obj[reindeer].rest;
+					obj[reindeer].pos += obj[reindeer].fly;
 				} else if (obj[reindeer].resting > 0) {
 					obj[reindeer].resting--;
-					if (obj[reindeer].resting == 1) {
-						obj[reindeer].flying = obj[reindeer].fly;
-					}
+					if (obj[reindeer].resting == 0) obj[reindeer].flying = obj[reindeer].flyFor;
+				} else if (obj[reindeer].flying == 0 && obj[reindeer].resting == 0) {
+					obj[reindeer].resting = obj[reindeer].rest;
 				}
-				//console.log(reindeer, obj[reindeer])
 			}
 		}
 		console.log(obj)
+		var max = 0;
+		for (var reindeer in obj) if (obj[reindeer].pos > max) max = obj[reindeer].pos;
+		return max;
 	}
-	//document.getElementById("result1").innerHTML = distanceWinningTraveled(input);
+	document.getElementById("result1").innerHTML = distanceWinningTraveled(input, 2503);
+	//3552 => too hight
+	//2624 => too low
+
 	document.getElementById("test1").innerHTML = (distanceWinningTraveled(["Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
 		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)===1120) ? "OK" : "ERROR";
 	/*part2*/
