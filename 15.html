@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div>
+		<b>PART 1:</b><br>
+		<b>Result: <span id="result1"></span></b><br>
+		Test: <span id="test1"></span>
+	</div><br>
+	<div>
+		<b>PART 2:</b><br>
+		<b>Result: <span id="result2"></span></b><br>
+		Test: <span id="test2"></span>
+	</div>
+	<script>
+	var input = [];
+	/*part1*/
+	function distanceWinningTraveled(arr, seconds) {
+		
+	}
+	document.getElementById("result1").innerHTML = distanceWinningTraveled(input, 2503)[0];
+	document.getElementById("test1").innerHTML = (distanceWinningTraveled(["Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
+		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)[0]===1120) ? "OK" : "ERROR";
+	/*part2*/
+	document.getElementById("result2").innerHTML = distanceWinningTraveled(input, 2503)[1];
+	document.getElementById("test2").innerHTML = (distanceWinningTraveled(["Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
+		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)[1]===689) ? "OK" : "ERROR";
+	</script>
+</body>
+</html>

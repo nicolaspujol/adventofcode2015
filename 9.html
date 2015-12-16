@@ -21,12 +21,7 @@
 	/*part1*/
 
 	function shortestRoute(arr) {
-		/*var cities = [];
-		for (var i = 0; i<arr.length; i++) {
-			var parts = /([a-zA-Z]*) to ([a-zA-Z]*) = ([0-9]*)/g.exec(arr[i]);
-			console.log(parts[1], parts[2], parts[3]);
-		}*/
-		
+
 		var routes = arr.reduce((mem, line) => {
 			var [path, dist] = line.split(" = ");
 			var [frm, to] = path.split(" to ");
