@@ -14,6 +14,7 @@
 	<div>
 		<b>PART 2:</b><br>
 		<b>Result: <span id="result2"></span></b><br>
+		Test: <span id="test2"></span>
 	</div>
 	<script>
 	var input = ["Vixen can fly 8 km/s for 8 seconds, but then must rest for 53 seconds.", "Blitzen can fly 13 km/s for 4 seconds, but then must rest for 49 seconds.",
@@ -23,47 +24,50 @@
 		"Dancer can fly 37 km/s for 1 seconds, but then must rest for 36 seconds."];
 	/*part1*/
 	function distanceWinningTraveled(arr, seconds) {
-		var newArr = arr.join("\n").replace(/\./g, '').split( '\n' );
-		var obj = {};
-		for (var i = 0; i < newArr.length; i++) {
-			var matches = newArr[i].match(/(.*) can fly ([0-9]*) km\/s for ([0-9]*) seconds, but then must rest for ([0-9]*)/);
-			obj[matches[1]] = {
-				"fly": parseInt(matches[2]),
-				"flyFor": parseInt(matches[3]),
-				"rest": parseInt(matches[4]),
-				"pos": 0,
-				"flying": parseInt(matches[3]),
-				"resting": 0
-			}
-		}
-		console.log(obj)
+		var obj = arr.map(function(a) {
+			var matches = a.match(/^(.+) can fly (\d+) km\/s for (\d+) seconds, but then must rest for (\d+) seconds/);
+			return {
+				fly: parseInt(matches[2]),
+				flyFor: parseInt(matches[3]),
+				rest: parseInt(matches[4]),
+				flying: 0,
+				pos: 0,
+				resting: 0,
+				points: 0
+			};
+		});
+		var maxDistanceTraveled = 0;
+		var maxPoints = 0;
 		for (var i = 0; i < seconds; i++) {
+			var leaderPos = 0;
 			for (var reindeer in obj) {
-				if (obj[reindeer].flying > 0) {
-					obj[reindeer].flying--;
+				if (obj[reindeer].resting) obj[reindeer].resting--;
+				else {
 					obj[reindeer].pos += obj[reindeer].fly;
-				} else if (obj[reindeer].resting > 0) {
-					obj[reindeer].resting--;
-					if (obj[reindeer].resting == 0) obj[reindeer].flying = obj[reindeer].flyFor;
-				} else if (obj[reindeer].flying == 0 && obj[reindeer].resting == 0) {
-					obj[reindeer].resting = obj[reindeer].rest;
+					if (++obj[reindeer].flying === obj[reindeer].flyFor) {
+						obj[reindeer].resting = obj[reindeer].rest;
+						obj[reindeer].flying = 0;
+					}
+				}
+				if (leaderPos < obj[reindeer].pos) leaderPos = obj[reindeer].pos;
+			}
+			for (var reindeer in obj) {
+				if(obj[reindeer].pos === leaderPos) obj[reindeer].points++;
+				if (i == seconds-1) {
+					if (maxDistanceTraveled < obj[reindeer].pos) maxDistanceTraveled = obj[reindeer].pos;
+					if (maxPoints < obj[reindeer].points) maxPoints = obj[reindeer].points;
 				}
 			}
 		}
-		console.log(obj)
-		var max = 0;
-		for (var reindeer in obj) if (obj[reindeer].pos > max) max = obj[reindeer].pos;
-		return max;
+		return [maxDistanceTraveled, maxPoints];
 	}
-	document.getElementById("result1").innerHTML = distanceWinningTraveled(input, 2503);
-	//3552 => too hight
-	//2624 => too low
-
+	document.getElementById("result1").innerHTML = distanceWinningTraveled(input, 2503)[0];
 	document.getElementById("test1").innerHTML = (distanceWinningTraveled(["Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
-		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)===1120) ? "OK" : "ERROR";
+		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)[0]===1120) ? "OK" : "ERROR";
 	/*part2*/
-	/*document.getElementById("result2").innerHTML = distanceWinningTraveled(nextPart1);
-	document.getElementById("test2").innerHTML = (distanceWinningTraveled("abcdefgh")==="abcdffaa" && distanceWinningTraveled("ghijklmn")==="ghjaabcc") ? "OK" : "ERROR";*/
+	document.getElementById("result2").innerHTML = distanceWinningTraveled(input, 2503)[1];
+	document.getElementById("test2").innerHTML = (distanceWinningTraveled(["Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
+		"Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds."], 1000)[1]===689) ? "OK" : "ERROR";
 	</script>
 </body>
 </html>
